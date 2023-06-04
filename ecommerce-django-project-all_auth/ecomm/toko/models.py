@@ -5,7 +5,7 @@ from django.urls import reverse
 
 PILIHAN_KATEGORI = (
     ('L', 'Laptop'),
-    ('AL', 'Aksesoris Laptop'),
+    ('AL', 'Accesories Laptop'),
     ('PS', 'Printer & Scanner')
 )
 

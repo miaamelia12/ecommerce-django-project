@@ -11,7 +11,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  
+
     <!-- MDB icon -->
     <link rel="icon" href="{% static 'img/mdb-favicon.ico' %}" type="image/x-icon" />
     <!-- Font Awesome -->
@@ -29,11 +29,11 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
   </head>
   <body>
-    
-    {% include 'navbar.html' %}
- 
 
-    <div class="mt-5 pt-4">
+    {% include 'navbar.html' %}
+
+
+    <div class="mt-5">
       {% if messages %}
           {% for message in messages %}
           <div class="container">
@@ -47,9 +47,9 @@
 
     {% block content %}
     {% endblock content %}
-    
+
     {% include 'footer.html' %}
-  
+
     {% include 'scripts.html' %}
 
     {% block scripts %}
