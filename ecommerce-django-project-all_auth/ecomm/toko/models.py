@@ -20,7 +20,7 @@ PILIHAN_PEMBAYARAN = (
     ('S', 'Stripe'),
 )
 
-User = get_user_model()
+User = get_user_model( )
 
 class ProdukItem(models.Model):
     nama_produk = models.CharField(max_length=100)
@@ -49,6 +49,8 @@ class ProdukItem(models.Model):
         return reverse("toko:remove-from-cart", kwargs={
             "slug": self.slug
             })
+    def get_categories():
+        return models.CharField(choices=PILIHAN_KATEGORI, max_length=2)
 
 class OrderProdukItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
