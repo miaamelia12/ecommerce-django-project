@@ -7,14 +7,49 @@ from django.utils import timezone
 from django.views import generic
 from paypal.standard.forms import PayPalPaymentsForm
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .forms import CheckoutForm
-from .models import ProdukItem, OrderProdukItem, Order, AlamatPengiriman, Payment
+from .models import ProdukItem, OrderProdukItem, Order, AlamatPengiriman, Payment, PILIHAN_KATEGORI
 
 class HomeListView(generic.ListView):
-    template_name = 'home.html'
-    queryset = ProdukItem.objects.all()
-    paginate_by = 4
+    def get(self, *args, **kwargs):
+        kategori_filter = self.request.GET.get("kategori", '')
+        search_filter = self.request.GET.get("search", '')
+
+        kategori = PILIHAN_KATEGORI
+        product = ProdukItem.objects.all()
+        if kategori_filter:
+            product = product.filter(kategori=kategori_filter)
+        if search_filter:
+            product = product.filter(nama_produk__contains=search_filter)
+
+        paginator = Paginator(product, 8) 
+        page_number = self.request.GET.get("page", 1)
+        page_obj = paginator.get_page(page_number)
+
+        try:
+            products = paginator.page(page_number)
+        except PageNotAnInteger:
+            products = paginator.page(1)
+        except EmptyPage:
+            products = paginator.page(paginator.num_pages)
+    
+        context = {
+            'products': products,
+            'kategori': kategori,
+            'kategori_filter': kategori_filter,
+            'is_paginated': 1,
+            'page_obj': page_obj,
+            'search': search_filter,
+        }
+        template_name = 'home.html'
+        
+        return render(self.request, template_name, context)
+    
+    # template_name = 'home.html'
+    # queryset = ProdukItem.objects.all()
+    # paginate_by = 8
 
 class ProductDetailView(generic.DetailView):
     template_name = 'product_detail.html'

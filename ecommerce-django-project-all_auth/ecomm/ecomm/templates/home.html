@@ -31,25 +31,28 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent2">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
+                      {% for item in kategori %}
                         <!-- Link -->
                         <li class="nav-item acitve">
-                            <a class="nav-link text-white" href="#">All</a>
+                            <a class="nav-link text-white" href="
+                              {% if search %}
+                                ?search={{search}}&kategori={{item.0}}
+                              {% else %}
+                                ?kategori={{item.0}}
+                              {% endif %}
+                            ">
+                              {{ item.1 }}
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Shirts</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Sport wears</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Outwears</a>
-                        </li>
+                      {% endfor %}
 
                     </ul>
 
                     <!-- Search -->
-                    <form class="w-auto py-1" style="max-width: 12rem">
-                        <input type="search" class="form-control rounded-0" placeholder="Search" aria-label="Search">
+                    <form class="w-auto py-1 d-flex justify-content-between" style="max-width: 15rem">
+                        <input type="hidden" class="form-control rounded-0" placeholder="Search" aria-label="Search" name="kategori" value="{{kategori_filter}}">
+                        <input type="search" class="form-control rounded-0" placeholder="Search" aria-label="Search" name="search" value="{{search}}">
+                        <input type="submit" class="form-control rounded-0" placeholder="Search" aria-label="Search" value="🔍" style="max-width: 3rem">
                     </form>
 
                 </div>
@@ -63,7 +66,7 @@
             <div class="text-center">
               <div class="row">
                 
-                {% for pItem in object_list %}
+                {% for pItem in products %}
                 <div class="col-lg-3 col-md-6 mb-4">
                   <div class="card">
                     <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
@@ -126,6 +129,11 @@
         <!-- Pagination -->
     </div>
 </main>
+
+<script>
+  var categoryasd = "{{products}}"
+  console.log('Cat', categoryasd)
+</script>
 <!--Main layout-->
 {% endblock content %}
 
