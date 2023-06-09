@@ -50,6 +50,7 @@
 
                     <!-- Search -->
                     <form class="w-auto py-1 d-flex justify-content-between" style="max-width: 15rem">
+                      {% csrf_token %}
                       <input type="search" class="form-control rounded-0" placeholder="Search" aria-label="Search" name="search" value="{{search}}">
                       <input type="hidden" class="form-control rounded-0" placeholder="Search" aria-label="Search" name="kategori" value="{{kategori_filter}}">
                         <input type="submit" class="form-control rounded-0" placeholder="Search" aria-label="Search" value="🔍" style="max-width: 3rem">

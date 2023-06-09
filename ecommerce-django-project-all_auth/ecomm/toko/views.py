@@ -250,3 +250,6 @@ def paypal_cancel(request):
 
 class KontakView(generic.TemplateView):
     template_name = 'kontak.html'
+
+class HistoryView(generic.TemplateView):
+    template_name = 'history_order.html'
