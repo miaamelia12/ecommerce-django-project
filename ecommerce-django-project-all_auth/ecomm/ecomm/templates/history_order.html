@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12 mt-4 mb-4">
-            <h1 class="text-center">History Order</h1>
+            <h1 class="text-center mt-4">History Order</h1>
         </div>
     </div>
     <table class="table align-middle mb-0 bg-white">
@@ -76,12 +76,12 @@
                     {% if keranjang.get_total_hemat_order %}
                     <span class="badge badge-danger">Hemat ${{ keranjang.get_total_hemat_order }}</span>
                     {% endif %}
+                    <a class='btn btn-warning float-end ml-2' href="{% url 'toko:review-product' %}">Nilai</a>
                 </td>
             </tr>
 
             <tr>
                 <td colspan="5">
-                <a class='btn btn-info float-end ml-2' href="{% url 'toko:checkout' %}">Checkout</a>
                 <a class='btn btn-danger' href="{% url 'toko:home-produk-list' %}">Lanjut belanja</a>
                 </td>
             </tr>

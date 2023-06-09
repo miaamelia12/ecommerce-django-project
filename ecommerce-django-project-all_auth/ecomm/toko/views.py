@@ -251,5 +251,67 @@ def paypal_cancel(request):
 class KontakView(generic.TemplateView):
     template_name = 'kontak.html'
 
-class HistoryView(generic.TemplateView):
-    template_name = 'history_order.html'
+class HistoryView(LoginRequiredMixin, generic.TemplateView):
+    def get(self, *args, **kwargs):
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False)
+            context = {
+                'keranjang': order
+            }
+            template_name = 'history_order.html'
+            return render(self.request, template_name, context)
+        except ObjectDoesNotExist:
+            messages.error(self.request, 'Tidak ada pesanan yang aktif')
+            return redirect('/')
+
+class ReviewProductView(LoginRequiredMixin, generic.TemplateView):
+    def get(self, *args, **kwargs):
+        form = CheckoutForm()
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False)
+            if order.produk_items.count() == 0:
+                messages.warning(self.request, 'Belum ada belajaan yang Anda pesan, lanjutkan belanja')
+                return redirect('toko:home-produk-list')
+        except ObjectDoesNotExist:
+            order = {}
+            messages.warning(self.request, 'Belum ada belajaan yang Anda pesan, lanjutkan belanja')
+            return redirect('toko:home-produk-list')
+
+        context = {
+            'form': form,
+            'keranjang': order,
+        }
+        template_name = 'review_produk.html'
+        return render(self.request, template_name, context)
+
+    def post(self, *args, **kwargs):
+        form = CheckoutForm(self.request.POST or None)
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False)
+            if form.is_valid():
+                alamat_1 = form.cleaned_data.get('alamat_1')
+                alamat_2 = form.cleaned_data.get('alamat_2')
+                negara = form.cleaned_data.get('negara')
+                kode_pos = form.cleaned_data.get('kode_pos')
+                opsi_pembayaran = form.cleaned_data.get('opsi_pembayaran')
+                alamat_pengiriman = AlamatPengiriman(
+                    user=self.request.user,
+                    alamat_1=alamat_1,
+                    alamat_2=alamat_2,
+                    negara=negara,
+                    kode_pos=kode_pos,
+                )
+
+                alamat_pengiriman.save()
+                order.alamat_pengiriman = alamat_pengiriman
+                order.save()
+                if opsi_pembayaran == 'P':
+                    return redirect('toko:payment', payment_method='paypal')
+                else:
+                    return redirect('toko:payment', payment_method='stripe')
+
+            messages.warning(self.request, 'Gagal checkout')
+            return redirect('toko:checkout')
+        except ObjectDoesNotExist:
+            messages.error(self.request, 'Tidak ada pesanan yang aktif')
+            return redirect('toko:review-product')

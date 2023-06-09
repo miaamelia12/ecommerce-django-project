@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content%}
+
+<style>
+    .rate {
+      float: left;
+      height: 46px;
+      padding: 0 10px;
+    }
+    .rate:not(:checked) > input {
+      position:absolute;
+      top:-9999px;
+    }
+    .rate:not(:checked) > label {
+      width:1em;
+      overflow:hidden;
+      white-space:nowrap;
+      cursor:pointer;
+      font-size:30px;
+      color:#ccc;
+    }
+    .rate:not(:checked) > label:before {
+      content: '★ ';
+    }
+    .rate > input:checked ~ label {
+      color: #ffc700;
+    }
+    .rate:not(:checked) > label:hover,
+    .rate:not(:checked) > label:hover ~ label {
+      color: #deb217;
+    }
+    .rate > input:checked + label:hover,
+    .rate > input:checked + label:hover ~ label,
+    .rate > input:checked ~ label:hover,
+    .rate > input:checked ~ label:hover ~ label,
+    .rate > label:hover ~ input:checked ~ label {
+      color: #c59b08;
+    }
+  </style>
+<!--Main layout-->
+<main class="mt-8">
+    <div class="container">
+        <!-- Heading -->
+        <div class="row">
+            <div class="col-12 mt-4 mb-4">
+                <h1 class="text-center mt-4">Review Product</h1>
+            </div>
+        </div>
+
+        <form method="POST" name="formCheckout">
+            {% csrf_token %}
+            <!--Grid row-->
+            <div class="row">
+                <!--Grid column-->
+                <div class="col-md-8 mb-4">
+                    <!--Card-->
+                    <div class="card p-4">
+                        <!--Grid row-->
+
+                        <!--review-->
+                        <p class="mb-0">
+                            Review
+                        </p>
+                        <div class="form-outline mb-4">
+                            {{ form.review }}
+                        </div>
+
+                        <hr />
+                        <div class="rate text-center">
+                            <input type="radio" id="star5" name="rate" value="5" />
+                            <label for="star5" title="text">5 stars</label>
+                            <input type="radio" id="star4" name="rate" value="4" />
+                            <label for="star4" title="text">4 stars</label>
+                            <input type="radio" id="star3" name="rate" value="3" />
+                            <label for="star3" title="text">3 stars</label>
+                            <input type="radio" id="star2" name="rate" value="2" />
+                            <label for="star2" title="text">2 stars</label>
+                            <input type="radio" id="star1" name="rate" value="1" />
+                            <label for="star1" title="text">1 star</label>
+                        </div>
+
+                        <hr class="mb-4" />
+                    <button class="btn btn-primary" type="submit">Send Review</button>
+                    </div>
+                    <!--/.Card-->
+                </div>
+                <!--Grid column-->
+
+
+                <!--Grid column-->
+                <div class="col-md-4 mb-4">
+                    <!-- Cart -->
+                    <ul class="list-group mb-3">
+                        {% for belanjaan in keranjang.produk_items.all %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <div>
+                                <h6 class="my-0">{{ belanjaan.quantity }} x {{ belanjaan.produk_item.nama_produk }}</h6>
+                                <small class="text-muted">{{ belanjaan.produk_item.deskripsi|truncatechars:50 }}</small>
+                            </div>
+                            {% if belanjaan.produk_item.harga_diskon %}
+                            <span class="text-muted">${{ belanjaan.get_total_harga_diskon_item }}
+                            {% else %}
+                            ${{ belanjaan.get_total_harga_item}}
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Total (USD)</span>
+                            <strong class="text-success">${{ keranjang.get_total_harga_order }}</strong>
+                        </li>
+                    </ul>
+                    <!-- Cart -->
+                </div>
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+        </form>
+    </div>
+</main>
+<!--Main layout-->
+{% endblock content %}

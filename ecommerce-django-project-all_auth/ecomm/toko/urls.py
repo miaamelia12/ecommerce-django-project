@@ -15,4 +15,5 @@ urlpatterns = [
      path('paypal-cancel/', views.paypal_cancel, name='paypal-cancel'),
      path('contact/', views.KontakView.as_view(), name='kontak'),
      path('history/', views.HistoryView.as_view(), name='history'),
+     path('review-product/', views.ReviewProductView.as_view(), name='review-product'),
 ]
