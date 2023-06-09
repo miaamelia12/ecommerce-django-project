@@ -56,6 +56,7 @@
                     {% else %}
                     ${{ pItem.get_total_harga_item }}
                     {% endif %}
+                    <a class='btn btn-warning float-end ml-2' href="{% url 'toko:review-product' %}">Nilai</a>
                 </td>
             </tr>
             {% empty %}
@@ -76,7 +77,6 @@
                     {% if keranjang.get_total_hemat_order %}
                     <span class="badge badge-danger">Hemat ${{ keranjang.get_total_hemat_order }}</span>
                     {% endif %}
-                    <a class='btn btn-warning float-end ml-2' href="{% url 'toko:review-product' %}">Nilai</a>
                 </td>
             </tr>
 
